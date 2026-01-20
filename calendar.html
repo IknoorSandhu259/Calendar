@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule</title>
+  <link rel="stylesheet" href="calendar.css">
+</head>
+<body>
+
+  <div class="top-bar">
+    <h1 id="monthYear"></h1>
+    <button id="themeToggle">Light / Dark</button>
+  </div>
+
+  <div class="nav-controls">
+    <button id="prev">Prev</button>
+    <button id="next">Next</button>
+  </div>
+
+  <div class="filter-controls">
+    <label for="courseSelect">Course:</label>
+    <select id="courseSelect">
+      <option value="">All Courses</option>
+    </select>
+  </div>
+
+  <div id="calendar" class="calendar"></div>
+
+  <div id="eventModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Add Event</h3>
+
+      <label>
+        Course
+        <input type="text" id="courseInput" placeholder="e.g. MATH1000">
+      </label>
+
+      <label>
+        Description
+        <input type="text" id="titleInput" placeholder="e.g. Assignment, Test, etc.">
+      </label>
+
+      <label>
+        Start time
+        <input type="text" id="startTimeInput" placeholder="e.g. 1pm or 13:00">
+      </label>
+
+      <label>
+        End time
+        <input type="text" id="endTimeInput" placeholder="e.g. 2:30pm or 14:30">
+      </label>
+
+      <div class="modal-buttons">
+        <button id="saveEvent">Save</button>
+        <button id="cancelEvent">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="calendar.js"></script>
+</body>
+</html>
