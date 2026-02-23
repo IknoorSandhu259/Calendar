@@ -18,6 +18,12 @@ const DAY_END = 20 * 60;
 const DAY_HEIGHT = 180;
 
 let selectedDateKey = null;
+let ignoreEvent = null;
+
+function isToday(year, month, day) {
+  const t = new Date();
+  return day === t.getDate() && month === t.getMonth() && year === t.getFullYear();
+}
 
 /* ---------- COLOR SEPARATION ---------- */
 const savedColors = JSON.parse(localStorage.getItem("courseColors")) || {};
@@ -31,7 +37,7 @@ const courseColors = {
 
 function getCourseColor(course) {
   if (courseColors[course]) {
-    return courseColours[course];
+    return courseColors[course];
   }
 
   const hue = Math.floor(Math.random() * 360);
@@ -106,6 +112,12 @@ function renderCalendar() {
   for (let day = 1; day <= daysInMonth; day++) {
     const dayDiv = document.createElement("div");
     dayDiv.className = "day";
+
+    if (isToday(year,  month, day)) {
+      dayDiv.classList.add("Today");
+    }
+
+    const today = new Date();
 
     const number = document.createElement("div");
     number.className = "day-number";
@@ -194,7 +206,7 @@ function renderCalendar() {
 
         eventDiv.addEventListener("click", evt => {
           evt.stopPropagation();
-          handleEventClick(dateKey, e);
+          openEditModal(dateKey, e);
         });
 
         dayEventsDiv.appendChild(eventDiv);
@@ -218,6 +230,68 @@ function handleEventClick(dateKey, eventObj) {
     removeEvent(dateKey, eventObj);
   }
 }
+
+/* ---------- EDIT EVENT ---------- */
+function openEditModal(dateKey, eventObj) {
+  selectedDateKey = dateKey;
+  ignoreEvent = eventObj;
+
+  courseInput.value = eventObj.course;
+  titleInput.value = eventObj.title;
+  startTimeInput.value = eventObj.startTime || "";
+  endTimeInput.value = eventObj.endTime || "";
+
+  modal.classList.remove("hidden");
+
+  const oldDeleteButton = modal.querySelector(".delete-btn");
+  if (oldDeleteButton) {
+    oldDeleteButton.remove();
+  }
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.onclick = () => {
+    removeEvent(dateKey, eventObj);
+    modal.classList.add("hidden");
+    selectedDateKey = null;
+    ignoreEvent = null;
+  };
+
+  modal.querySelector(".modal-content").appendChild(deleteBtn);
+  
+  saveEventBtn.onclick = () => {
+    const course = courseInput.value;
+    const title = titleInput.value.trim();
+    const startTime = normalizeTime(startTimeInput.value.trim());
+    const endTime = normalizeTime(endTimeInput.value.trim());
+
+    if (hasConflict(dateKey, startTime, endTime)) {
+      alert("This event conflicts with an existing one!");
+      return ;
+    }
+
+    removeEvent(dateKey, eventObj);
+    
+    if (!events[dateKey]) events[dateKey] = [];
+
+    events[dateKey].push({
+      course,
+      title,
+      startTime,
+      endTime
+    });
+
+    localStorage.setItem("events", JSON.stringify(events));
+    modal.classList.add("hidden");
+    selectedDateKey = null;
+    ignoreEvent = null;
+
+    populateCourseDropdown();
+    renderCalendar();
+  };
+}
+
 
 /* ---------- NORMALIZE TIME ---------- */
 function normalizeTime(input) {
@@ -264,6 +338,11 @@ function openModal(dateKey) {
   startTimeInput.value = "";
   endTimeInput.value = "";
   modal.classList.remove("hidden");
+
+  const oldDeleteButton = modal.querySelector(".delete-btn");
+  if (oldDeleteButton) {
+    oldDeleteButton.remove();
+  }
 }
 
 cancelEventBtn.addEventListener("click", () => {
@@ -312,7 +391,7 @@ saveEventBtn.addEventListener("click", () => {
     }
 
     if (hasConflict(selectedDateKey, startTime, newEndTime)) {
-      alert("This event conflicts with an existing one");
+      alert("This event conflicts with an existing one!");
       return ;
     }
   }
@@ -322,6 +401,7 @@ saveEventBtn.addEventListener("click", () => {
   }
 
   events[selectedDateKey].push({
+    id: crypto.randomUUID(),
     course,
     title,
     startTime,
@@ -399,6 +479,10 @@ function hasConflict(dateKey, newStart, newEnd) {
   const newEndMin = newEnd ? newEnd.split(":").map(Number).reduce((h, m) => h * 60 + m) : newStartMin + 60;
   
   return (events[dateKey] || []).some(e => {
+    if (ignoreEvent && e.course === ignoreEvent.course && e.title === ignoreEvent.title && normalizeTime(e.startTime) === normalizeTime(ignoreEvent.startTime) && normalizeTime(e.endTime) === normalizeTime(ignoreEvent.endTime)) {
+      return false;
+    }
+
     if (!e.startTime) {
       return false;
     }

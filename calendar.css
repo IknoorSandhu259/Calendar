@@ -66,25 +66,58 @@ body.dark option {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* ---------- WEEKDAY ---------- */
+.weekday-header {
+  display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  font-weight:bold;
+  gap:5px;
+}
+
+.weekday-header div {
+  text-align:center;
+  border:1px solid var(--border);
+  padding:4px 0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.calendar-wrapper {
+  width:100%;
+  padding:0 10px;
+  box-sizing:border-box;
+}
+
 /* ---------- CALENDAR ---------- */
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
-  max-width: 600px;
 }
+
+.today {
+  background:rgba(0, 150, 255, 0.15);
+  border:2px solid rgba(0, 150, 255, 0.5);
+}
+
+.dark .today {
+  background:rgba(0, 150, 255, 0.25);
+}
+
 
 .day {
   border: 1px solid var(--border);
   padding: 6px;
-  min-height: 80px;
+  min-height: 160px;
   position: relative;
+  display:flex;
+  flex-direction:column;
 }
 
 .day-events {
   position: relative;
   height: 144px;
-  width: 100px;
+  width: 100%;
   margin-top: 4px;
 }
 
@@ -92,11 +125,19 @@ body.dark option {
   font-weight: bold;
 }
 
+.day:hover {
+  background:rgba(0, 0, 0, 0.03);
+}
+
+.dark .day:hover {
+  background:rgba(255, 255, 255, 0.05);
+}
+
 /* ---------- EVENTS ---------- */
 .event {
   position: absolute;
-  left: 2px;
-  right: 2px;
+  left: 4px;
+  right: 4px;
   font-size: 0.75em;
   line-height: 1.2;
   margin-top: 3px;
