@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule</title>
+  <link rel="stylesheet" href="calendar.css">
+</head>
+<body>
+
+  <div class="top-bar">
+    <h1 id="monthYear"></h1>
+    <button id="themeToggle">Light / Dark</button>
+  </div>
+
+  <div class="nav-controls">
+    <button id="prev">Prev</button>
+    <button id="next">Next</button>
+  </div>
+
+  <div class="filter-controls">
+    <label for="courseSelect">Course:</label>
+    <select id="courseSelect">
+      <option value="">All Courses</option>
+    </select>
+  </div>
+
+  <div class="tab-bar">
+    <button id="calendarTab" class="tab active">Calendar</button>
+    <button id="upcomingTab" class="tab">Upcoming</button>
+  </div>
+
+  <div id="calendarView">
+    <div class="calendar-wrapper">
+      <div class="weekday-header">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div id="calendar" class="calendar"></div>
+    </div>
+  </div>
+
+  <div id="upcomingView" class="hidden">
+    <div class="week-nav">
+      <button id="weekPrev">Prev</button>
+      <span id="weekLabel"></span>
+      <button id="weekNext">Next</button>
+    </div>
+
+    <div class="week-grid-wrapper">
+      <div class="week-time-col">
+        <div class="week-header-spacer"></div>
+        <div class="week-allday-spacer"></div>
+      </div>
+
+      <div id="weekGrid" class="week-grid"></div>
+    </div>
+  </div>
+
+  <div id="eventModal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="modalTitle">Add Event</h3>
+
+      <label>
+        Course
+        <input type="text" id="courseInput" placeholder="e.g. MATH1000" list="courseList">
+        <datalist id="courseList"></datalist>
+      </label>
+
+      <label>
+        Description
+        <input type="text" id="titleInput" placeholder="e.g. Assignment, Test, etc.">
+      </label>
+
+      <label>
+        Start time
+        <input type="text" id="startTimeInput" placeholder="e.g. 1pm or 13:00">
+      </label>
+
+      <label>
+        End time
+        <input type="text" id="endTimeInput" placeholder="e.g. 2:30pm or 14:30">
+      </label>
+      
+      <label>
+        <input type="checkbox" id="recurringCheck"> Repeat weekly
+      </label>
+
+      <div id="recurringFields" style="display:none">
+        <label>
+          Start date
+          <input type="date" id="recurStartInput">
+        </label>
+
+        <label>
+          End date
+          <input type="date" id="recurEndInput">
+        </label>
+      </div>
+
+      <div class="modal-buttons">
+        <button id="saveEvent">Save</button>
+        <button id="cancelEvent">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="calendar.js"></script>
+</body>
+</html>
