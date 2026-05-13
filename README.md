@@ -11,7 +11,7 @@ Interactive web-based calendar built with HTML, CSS, and JavaScript, allowing ev
 ## How to Use
 Visit the live site: [Live Site](https://iknoorsandhu259.github.io/Calendar/)
 
-No installation required — runs entirely in the browser.
+No installation required, runs entirely in the browser.
 
 ## Local Development
 If you want to run it locally:
